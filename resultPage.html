@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Quiz Results</title>
+    <style>
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            background: conic-gradient(
+                #4d5bf9 calc(var(--progress) * 1%),
+                #cfd8dc calc(var(--progress) * 1%)
+            );
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            color: #ff6f61;
+            margin: 0 auto;
+        }
+        .result-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-top: 15px;
+        }
+        .row {
+            background-color: #CCE5FF;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header-row h1 {
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="header-row mb-4">
+            <button class="btn btn-outline-secondary btn-back" onclick="goBack()"><svg xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+              </svg>Back</button>
+            <h1 class="mb-0">Results</h1>
+        </div>
+        <div class="row mb-4 justify-content-center">
+            <div class="col-md-3 result-item">
+                <div class="progress-circle" id="progressCircle" style="--progress: 0;">
+                    <span id="progressText"></span>
+                </div>
+                <p>Score</p>
+            </div>
+            <div class="col-md-3 result-item">
+                <h2 id="percentage"></h2>
+                <p>Percentage</p>
+            </div>
+            <div class="col-md-3 result-item">
+                <h2 id="completionDate"></h2>
+                <p>Completion Date</p>
+            </div>
+        </div>
+        <div id="wrongAnswers" class="text-start"></div>
+    </div>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./Renderer/resultRenderer.js"></script>
+</body>
+</html>

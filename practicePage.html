@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSV Practice App</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 20px;
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: #f8f9fa;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-content {
+            overflow-y: auto;
+            flex-grow: 1;
+            padding-top: 20px;
+        }
+
+        .content {
+            margin-left: 220px;
+            padding: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 50px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-btn.active {
+            border: 2px solid #007bff;
+        }
+
+        .nav-btn.answered {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .nav-btn.incomplete {
+            background-color: #fff;
+            border-color: #f5c6cb;
+        }
+
+        #timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: red;
+        }
+
+        .sidebar-footer {
+            padding: 10px 0;
+        }
+
+        .submit-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: none;
+        }
+
+        .fixed-bottom {
+            position: fixed;
+            bottom: 20px;
+            width: calc(100% - 240px);
+            left: 220px;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            background-color: white;
+        }
+
+        .btn-back {
+            margin: 20px auto;
+        }
+
+        .btn-width {
+            width: 49%;
+        }
+
+        .side-btn {
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <button class="btn btn-outline-secondary w-75 btn-back" onclick="goBack()"><svg xmlns="./Icon/arrow-left.svg"
+                width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px"
+                class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>Back</button>
+        <div class="sidebar-content">
+            <h4 class="text-center">All Questions</h4>
+            <div class="nav-grid" id="questionNav">
+                <!-- Buttons for each question will be dynamically generated here -->
+            </div>
+        </div>
+        <div class="sidebar-footer">
+            <button class="btn btn-primary w-75 side-btn" id="showAnswerButton" onclick="showAnswer()"
+                style="display: none; margin-bottom: 10px;">
+                Show Answer
+            </button>
+        </div>
+    </div>
+    <div class="content">
+        <h2 id="fileNameTitle" class="mb-4">Start Practice</h2>
+        <form id="csvForm" class="mb-4">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <input type="file" class="form-control" id="csvFile" accept=".csv" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button type="button" class="btn btn-primary w-100" id="loadCSVButton" onclick="window.loadCSV()">
+                        Load File
+                    </button>
+                </div>
+            </div>
+        </form>
+        <form id="questionModeForm" class="mb-4" style="display: none;">
+            <div class="mb-3">
+                <label for="modeSelect" class="form-label">Select Question Mode:</label>
+                <select class="form-select" id="modeSelect" onchange="toggleModeOptions()">
+                    <option value="all">Practice All Questions</option>
+                    <option value="random">Practice Random Questions</option>
+                    <option value="range">Practice Questions in a Range</option>
+                </select>
+            </div>
+            <div id="randomOptions" style="display: none;">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="randomOption" id="randomAll" value="all" checked
+                        onclick="toggleRandomNumberOptions()">
+                    <label class="form-check-label" for="randomAll">
+                        Practice all questions in random order
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="randomOption" id="randomNumber" value="number"
+                        onclick="toggleRandomNumberOptions()">
+                    <label class="form-check-label" for="randomNumber">
+                        Practice a specific number of questions
+                    </label>
+                </div>
+                <div class="mt-2" id="randomNumberOptions" style="display: none;">
+                    <label for="randomCount" class="form-label">Number of Questions:</label>
+                    <input type="number" class="form-control" id="randomCount" min="1" value="1">
+                </div>
+            </div>
+            <div id="rangeOptions" style="display: none;">
+                <label for="startQuestion" class="form-label">Start Question:</label>
+                <input type="number" class="form-control" id="startQuestion" min="1" value="1">
+                <label for="endQuestion" class="form-label">End Question:</label>
+                <input type="number" class="form-control" id="endQuestion" min="1" value="1">
+            </div>
+            <div class="mb-3">
+                <label for="timerSelect" class="form-label">Timer:</label>
+                <select class="form-select" id="timerSelect" onchange="toggleTimerOptions()">
+                    <option value="none">No Timer</option>
+                    <option value="set">Set Timer</option>
+                </select>
+            </div>
+            <div id="timerOptions" style="display: none;">
+                <label for="timerMinutes" class="form-label">Minutes:</label>
+                <input type="number" class="form-control" id="timerMinutes" min="1" value="1">
+            </div>
+            <button type="button" class="btn btn-primary mt-3" onclick="startPractice()">Start Practice</button>
+        </form>
+        <div id="timer" style="display: none;">00:00</div>
+        <div id="questionContainer" class="question mt-4"></div>
+        <div id="quizResults">
+            <!-- Quiz results will be displayed here -->
+        </div>
+    </div>
+    <div id="navigationButtons" class="fixed-bottom" role="group" style="display: none;">
+        <button type="button" class="btn btn-secondary btn-width" id="prevButton" onclick="prevQuestion()">
+            Previous
+        </button>
+        <button type="button" class="btn btn-primary btn-width" id="nextButton" onclick="nextQuestion()">
+            Next
+        </button>
+    </div>
+    <button type="button" class="btn btn-success submit-btn" id="submitQuizButton" onclick="submitQuiz()">
+        Submit Quiz
+    </button>
+    <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="./Renderer/practicePage.js"></script>
+</body>
+
+</html>

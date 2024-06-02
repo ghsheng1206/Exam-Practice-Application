@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>History</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html,
+        body,
+        #sidebar,
+        #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+
+        .history-item {
+            margin-bottom: 15px;
+        }
+
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px; 
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: red;
+            font-size: 20px;
+        }
+
+        .card-header {
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .collapse.show {
+            display: block;
+        }
+
+        .collapse {
+            display: none;
+        }
+
+        .card-body {
+            padding: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">History</h1>
+        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>Back</button>
+        <div id="historyContainer"></div>
+    </div>
+
+    <script src="./Renderer/historyRenderer.js"></script>
+    <script>
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+    </script>
+</body>
+
+</html>

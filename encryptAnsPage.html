@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Encrypt CSV</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html,
+        body,
+        #sidebar,
+        #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">Encrypt File Answers</h1>
+        <div class="d-flex mb-3">
+            <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg
+                    xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor"
+                    style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>Back</button>
+        </div>
+        <div class="mb-3">
+            <label for="csvFile" class="form-label">Upload file:</label>
+            <input type="file" id="csvFile" class="form-control" accept=".csv" required>
+        </div>
+        <button id="encryptBtn" class="btn btn-primary">Encrypt File</button>
+    </div>
+
+    <script src="./Renderer/encryptAnswer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script>
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+    </script>
+</body>
+
+</html>

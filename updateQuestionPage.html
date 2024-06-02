@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Update Questions</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html,
+        body,
+        #sidebar,
+        #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination-button {
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .editable {
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+        }
+
+        .editable:focus {
+            outline: none;
+            border: 1px solid #007bff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">Update File</h1>
+        <div class="d-flex mb-3">
+            <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()">
+                <svg xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor"
+                    style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+                </svg>Back
+            </button>
+        </div>
+
+        <div class="mb-4">
+            <h4>Load File</h4>
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="updateCsvFile" accept=".csv" />
+                <button class="btn btn-outline-primary" type="button" id="updateLoadCSVButton" onclick="loadUpdateCSV()">
+                    Load File
+                </button>
+            </div>
+        </div>
+
+        <div id="form-container" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Questions</h4>
+                <button class="btn btn-primary" onclick="addNewQuestionRow()">Add Question</button>
+            </div>
+            <div id="updateQuestionTableContainer" class="mt-4">
+                <!-- Table to display questions will be appended here -->
+            </div>
+            <div class="pagination-container">
+                <button type="button" class="btn btn-primary" id="firstPage" style="margin-right: 8px;">First</button>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group me-2" role="group" aria-label="First group" id="paginationNumbers">
+                        <!-- Pagination buttons will be dynamically inserted here -->
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary" id="lastPage">Last</button>
+            </div>
+            <div id="errorMessage" style="color: red; display: none;"></div>
+            <button class="btn btn-primary mt-3" id="exportCSVButton" onclick="exportUpdateCSV()" style="display: none;">
+                Export Updated File
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="./Renderer/updateQuestion.js"></script>
+    <script>
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+    </script>
+</body>
+
+</html>

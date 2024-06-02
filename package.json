@@ -1,0 +1,22 @@
+{
+  "name": "exam-practice-simulator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "csv-parser": "^3.0.0",
+    "fs": "^0.0.1-security"
+  },
+  "devDependencies": {
+    "electron": "^28.1.4"
+  }
+}
