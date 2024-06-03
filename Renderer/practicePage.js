@@ -16,7 +16,7 @@ window.loadCSV = async function () {
     const file = fileInput.files[0];
     if (!file) {
         alert("Please select a CSV file.");
-        return;
+        window.location.href = "./practicePage.html";
     }
 
     // Store the file name in localStorage
