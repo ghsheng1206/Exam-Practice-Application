@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Guide</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html,
+        body,
+        #sidebar,
+        #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">User Guide</h1>
+        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg xmlns="./Icon/arrow-left.svg"
+                width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px"
+                class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>Back</button>
+
+        <h2>Update File Guide</h2>
+        <br>
+        <p>For update the question file, you can update the file by app or inside Microsft Excel
+        </p>
+        <hr>
+
+
+        <h4>Use Microsft Excel</h4>
+        <p>1. Go to the file you want to update, and direct update the question inside the Excel.
+        </p>
+
+        <br>
+        <hr>
+        <h4>Use application</h4>
+        <p>1. Go to "update File" on left sidebar, and select "<a href="./updateQuestionPage.html">Add/Update Question</a>", input the file you want to update and you can add or update question with the file. </p>
+        <p>2. After complete add or update, export the updated file to your desktop.</p>
+        <img src="./Image/updateFile.png" alt="input file for practice" width="800">
+    </div>
+
+    <script>
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+
+        function goBack() {
+            window.location.href = 'guidePage.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Guide</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html,
+        body,
+        #sidebar,
+        #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">User Guide</h1>
+        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg xmlns="./Icon/arrow-left.svg"
+                width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px"
+                class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>Back</button>
+
+        <h2>Create New File Guide</h2>
+        <p>Create new practice file have 2 option, you can create the file in application or by using Microsoft Excel
+        </p>
+        <hr>
+        <br>
+
+        <h4>Use Microsft Excel</h4>
+        <a href="./sampleFile/sample.csv" id="downloadLink" download="sample.csv">Sample CSV File</a>
+        <p>1. For create new file by Microsoft Excel, you need to follow with the format below, Or you can download the like above for the file. Change the question type to
+            the question you want, and for true-false question the option is only A with TRUE and B with FALSE only.
+        </p>
+        <p>2. After complete, save your file in the format <strong>.CSV</strong>.</p>
+        <img src="./Image/newFile(excel).png" alt="input file for practice" width="800">
+
+        <br><br>
+        <hr>
+        <h4>Use application</h4>
+        <p>1. For create new file by application, go to "<a href="./newFilePage.html">New File page</a>", input the question and export the file to your
+            computer.</p>
+        <p>2. For question option, option A and B is required and for option C to F is optional</p>
+        <img src="./Image/newFile.png" alt="input file for practice" width="800">
+    </div>
+
+    <script>
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+
+        function goBack() {
+            window.location.href = 'guidePage.html';
+        }
+    </script>
+</body>
+
+</html>
