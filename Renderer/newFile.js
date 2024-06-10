@@ -66,6 +66,14 @@ function displayNewFileTable(questions) {
         `;
         questionTypeSelect.onchange = function () {
             question['Question Type'] = questionTypeSelect.value;
+            const answerInput = row.cells[2].querySelector('input');
+
+            if (questionTypeSelect.value === 'Single-answer' || questionTypeSelect.value === 'True-false') {
+                answerInput.maxLength = 1; // Limit answer to one character
+            } else {
+                answerInput.removeAttribute('maxLength');
+            }
+
             if (questionTypeSelect.value === 'True-false') {
                 row.cells[3].querySelector('input').value = 'True';
                 row.cells[4].querySelector('input').value = 'False';
@@ -113,6 +121,9 @@ function displayNewFileTable(questions) {
         answerInput.className = 'form-control editable';
         answerInput.required = true;
         answerInput.value = question['Answer'] || '';
+        if (question['Question Type'] === 'Single-answer' || question['Question Type'] === 'True-false') {
+            answerInput.maxLength = 1;
+        }
         answerInput.onblur = function () {
             question['Answer'] = answerInput.value;
         };
