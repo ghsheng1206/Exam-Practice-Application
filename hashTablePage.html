@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Hash Table</title>
+    <style>
+        #sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 280px;
+        }
+
+        #main-content {
+            margin-left: 300px;
+            padding: 20px;
+        }
+
+        html, body, #sidebar, #main-content {
+            height: 100%;
+        }
+
+        a.text-white {
+            text-decoration: none;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar"></div>
+    <div id="main-content">
+        <h1 class="mb-4">File Hash Table</h1>
+        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg
+                xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor"
+                style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>Back</button>
+        <table class="table table-bordered" id="hashTable">
+            <thead>
+                <tr>
+                    <th>Original File Name</th>
+                    <th>New File Name</th>
+                    <th>Hash</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be added here dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function goBack() {
+            window.location.href = './index.html';
+        }
+
+        fetch("sideNavBar.html")
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("sidebar").innerHTML = data;
+            })
+            .catch((error) => console.error("Error loading sidebar:", error));
+
+        // Function to load the hash table from localStorage
+        function loadHashTable() {
+            const hashTableBody = document.getElementById('hashTable').getElementsByTagName('tbody')[0];
+            const storedHashes = JSON.parse(localStorage.getItem('fileHashes')) || [];
+            hashTableBody.innerHTML = '';
+            storedHashes.forEach((entry, index) => {
+                const row = hashTableBody.insertRow();
+                const cell1 = row.insertCell(0);
+                const cell2 = row.insertCell(1);
+                const cell3 = row.insertCell(2);
+                const cell4 = row.insertCell(3);
+                cell1.textContent = entry.originalFileName;
+                cell2.textContent = entry.newFileName;
+                cell3.textContent = entry.hash;
+                cell4.innerHTML = `<button class="btn btn-danger" onclick="deleteRow(${index})">Delete</button>`;
+            });
+        }
+
+        // Function to delete a row from the table and localStorage
+        function deleteRow(index) {
+            if (confirm('Are you sure you want to delete this row?')) {
+                const storedHashes = JSON.parse(localStorage.getItem('fileHashes')) || [];
+                storedHashes.splice(index, 1);
+                localStorage.setItem('fileHashes', JSON.stringify(storedHashes));
+                loadHashTable();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadHashTable);
+    </script>
+</body>
+</html>
