@@ -71,6 +71,11 @@
             border-color: #f5c6cb;
         }
 
+        .nav-btn.marked {
+            background-color: #ffeb3b;
+            border-color: #f0ad4e;
+        }
+
         #timer {
             font-size: 1.5rem;
             font-weight: bold;
@@ -104,11 +109,26 @@
         }
 
         .btn-width {
-            width: 49%;
-        }
+    width: 100%;
+}
+
+#navigationButtons .btn-block {
+    display: block;
+    width: 100%;
+}
+
 
         .side-btn {
             margin: auto;
+        }
+
+        .mark-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            float: right;
+            padding: 0;
+            margin: 0;
         }
     </style>
 </head>
@@ -151,6 +171,13 @@
             </div>
         </form>
         <form id="questionModeForm" class="mb-4" style="display: none;">
+            <div class="mb-3">
+                <label for="practiceModeSelect" class="form-label">Select Practice Mode:</label>
+                <select class="form-select" id="practiceModeSelect">
+                    <option value="practice">Practice Mode</option>
+                    <option value="exam">Exam Mode</option>
+                </select>
+            </div>
             <div class="mb-3">
                 <label for="modeSelect" class="form-label">Select Question Mode:</label>
                 <select class="form-select" id="modeSelect" onchange="toggleModeOptions()">
@@ -208,7 +235,7 @@
         <button type="button" class="btn btn-secondary btn-width" id="prevButton" onclick="prevQuestion()">
             Previous
         </button>
-        <button type="button" class="btn btn-primary btn-width" id="nextButton" onclick="nextQuestion()">
+        <button type="button" class="btn btn-primary btn-width btn-block" id="nextButton" onclick="nextQuestion()">
             Next
         </button>
     </div>
