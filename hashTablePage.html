@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,10 @@
             padding: 20px;
         }
 
-        html, body, #sidebar, #main-content {
+        html,
+        body,
+        #sidebar,
+        #main-content {
             height: 100%;
         }
 
@@ -27,24 +31,47 @@
             text-decoration: none;
             color: white;
         }
+
+        .verification-container {
+            display: flex;
+            align-items: center;
+        }
+
+        #verificationResult {
+            margin-left: 15px;
+        }
     </style>
 </head>
+
 <body>
     <div id="sidebar"></div>
     <div id="main-content">
         <h1 class="mb-4">File Hash Table</h1>
-        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()"><svg
-                xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor"
-                style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                    d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
-            </svg>Back</button>
-        <table class="table table-bordered" id="hashTable">
-            <thead>
+        <button class="btn btn-outline-secondary btn-back mb-3" onclick="goBack()">
+            <svg xmlns="./Icon/arrow-left.svg" width="16" height="16" fill="currentColor" style="padding-bottom: 2px; padding-right: 2px" class="bi bi-arrow-left" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+            </svg>
+            Back
+        </button>
+
+        <div class="mb-4">
+            <label for="verifyFileInput" class="form-label">Select file to verify</label>
+            <input type="file" class="form-control mb-2" id="verifyFileInput" accept=".csv">
+            <label for="hashInput" class="form-label">Enter hash to verify</label>
+            <input type="text" class="form-control mb-3" id="hashInput" placeholder="Enter hash to verify">
+            <div class="verification-container">
+                <button class="btn btn-primary" onclick="verifyFileHash()">Verify File</button>
+                <p id="verificationResult" class="mt-3"></p>
+            </div>
+        </div>
+
+        <table class="table table-bordered table-hover" id="hashTable">
+            <thead class="table-light">
                 <tr>
                     <th>Original File Name</th>
                     <th>New File Name</th>
                     <th>Hash</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,13 +98,19 @@
             const storedHashes = JSON.parse(localStorage.getItem('fileHashes')) || [];
             hashTableBody.innerHTML = '';
             storedHashes.forEach((entry, index) => {
+                // Ensure the new file name has a .csv extension
+                let newFileName = entry.newFileName;
+                if (!newFileName.endsWith('.csv')) {
+                    newFileName += '.csv';
+                }
+
                 const row = hashTableBody.insertRow();
                 const cell1 = row.insertCell(0);
                 const cell2 = row.insertCell(1);
                 const cell3 = row.insertCell(2);
                 const cell4 = row.insertCell(3);
                 cell1.textContent = entry.originalFileName;
-                cell2.textContent = entry.newFileName;
+                cell2.textContent = newFileName;
                 cell3.textContent = entry.hash;
                 cell4.innerHTML = `<button class="btn btn-danger" onclick="deleteRow(${index})">Delete</button>`;
             });
@@ -94,6 +127,42 @@
         }
 
         document.addEventListener('DOMContentLoaded', loadHashTable);
+
+        // Function to verify the file hash
+        function verifyFileHash() {
+            const fileInput = document.getElementById('verifyFileInput');
+            const hashInput = document.getElementById('hashInput').value.trim();
+            if (!fileInput.files[0]) {
+                alert("Please select a file to verify.");
+                return;
+            }
+            if (!hashInput) {
+                alert("Please enter a hash to verify.");
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const fileContent = event.target.result;
+                hashFileContent(fileContent).then(fileHash => {
+                    const match = fileHash === hashInput;
+                    const resultMessage = match ? '<span class="text-success">Match</span>' : '<span class="text-danger">Mismatch</span>';
+                    document.getElementById('verificationResult').innerHTML = `Verification result: ${resultMessage}`;
+                });
+            };
+            reader.readAsText(file);
+        }
+
+        // Function to hash the file content
+        function hashFileContent(content) {
+            return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(content))
+                .then(hashBuffer => {
+                    const hashArray = Array.from(new Uint8Array(hashBuffer));
+                    return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+                });
+        }
     </script>
 </body>
+
 </html>
