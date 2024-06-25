@@ -147,7 +147,7 @@
                 const fileContent = event.target.result;
                 hashFileContent(fileContent).then(fileHash => {
                     const match = fileHash === hashInput;
-                    const resultMessage = match ? '<span class="text-success">Match</span>' : '<span class="text-danger">Mismatch</span>';
+                    const resultMessage = match ? '<span class="text-success">Match</span>' : '<span class="text-danger">Not Match</span>';
                     document.getElementById('verificationResult').innerHTML = `Verification result: ${resultMessage}`;
                 });
             };
