@@ -19,6 +19,7 @@ window.loadCSV = async function () {
     if (!file) {
         alert("Please select a CSV file.");
         window.location.href = "./practicePage.html";
+        return;
     }
 
     localStorage.setItem('quizFileName', file.name);
@@ -26,27 +27,66 @@ window.loadCSV = async function () {
     document.getElementById("fileNameTitle").innerText = fileName;
 
     const fileReader = new FileReader();
-    fileReader.onload = function (event) {
+    fileReader.onload = async function (event) {
         const data = event.target.result;
         Papa.parse(data, {
             header: true,
             skipEmptyLines: true,
-            complete: function (results) {
+            complete: async function (results) {
                 currentQuestions = results.data;
+                const isHashed = currentQuestions.some(q => /^[a-f0-9]{64}$/.test(q['Answer']));
+                if (isHashed) {
+                    const fileHashInput = document.getElementById("fileHash").value.trim();
+                    if (!fileHashInput) {
+                        alert("This file requires a hash code to be entered.");
+                        form.style.display = 'block';
+                        return;
+                    }
+
+                    const isValidHash = await verifyFileHash(data, fileHashInput);
+                    if (!isValidHash) {
+                        alert("Your file or your code is not correct.");
+                        form.style.display = 'block';
+                        return;
+                    }
+
+                    isFileHashVerified = true;  // Set the flag to true
+                }
+
                 document.getElementById('questionModeForm').style.display = 'block';
                 fileLoaded = true;
             },
             error: function (error) {
                 console.error("CSV parsing error:", error);
                 alert("Error parsing CSV file. Please check the file format.");
+                form.style.display = 'block';
             },
         });
     };
     fileReader.onerror = function () {
         alert("Error reading the CSV file.");
+        form.style.display = 'block';
     };
     fileReader.readAsText(file);
 };
+
+async function verifyFileHash(data, fileHashInput) {
+    const computedHash = await hashFileContent(data);
+
+    console.log("Computed Hash:", computedHash);
+    console.log("Entered Hash:", fileHashInput);
+
+    return computedHash === fileHashInput;
+}
+
+// Function to hash the file content
+function hashFileContent(content) {
+    return window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(content))
+        .then(hashBuffer => {
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(byte => byte.toString(16).padStart(2, '0')).join('');
+        });
+}
 
 function goBack() {
     if (fileLoaded && !confirm("Are you sure you want to stop the test and go back?")) return;
@@ -70,14 +110,30 @@ function toggleTimerOptions() {
     document.getElementById('timerOptions').style.display = timer === 'set' ? 'block' : 'none';
 }
 
-function startPractice() {
+async function startPractice() {
+    const isHashed = currentQuestions.some(q => /^[a-f0-9]{64}$/.test(q['Answer']));
+
+    // Only check if the file is hashed and has not been verified
+    if (isHashed && !isFileHashVerified) {
+        const fileHashInput = document.getElementById("fileHash").value.trim();
+        if (!fileHashInput) {
+            alert("This file requires a hash to be entered.");
+            return;
+        }
+
+        const isValidHash = await verifyFileHash();
+        if (!isValidHash) {
+            alert("Your file or your code is not correct.");
+            return;
+        }
+    }
+
     const practiceMode = document.getElementById('practiceModeSelect').value;
     examMode = practiceMode === 'exam';
 
     const mode = document.getElementById('modeSelect').value;
 
     localStorage.setItem('practiceMode', practiceMode);
-
 
     if (mode === 'all') {
         generateQuestionNav(currentQuestions.length);
@@ -130,7 +186,6 @@ function startPractice() {
     displayQuestion(currentQuestionIndex);
     startPracticeMode();
 }
-
 
 function getRandomQuestions(questions, count) {
     const shuffled = shuffleArray(questions);

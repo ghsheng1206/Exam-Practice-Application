@@ -158,12 +158,15 @@
         <h2 id="fileNameTitle" class="mb-4">Start Practice</h2>
         <form id="csvForm" class="mb-4">
             <div class="row">
-                <div class="col-md-9">
+                <div class="col-md-6">
                     <div class="form-group">
                         <input type="file" class="form-control" id="csvFile" accept=".csv" />
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="fileHash" placeholder="Optional: Enter file hash code" />
+                </div>
+                <div class="col-md-2">
                     <button type="button" class="btn btn-primary w-100" id="loadCSVButton" onclick="window.loadCSV()">
                         Load File
                     </button>
@@ -177,7 +180,7 @@
                     <option value="practice">Practice Mode</option>
                     <option value="exam">Exam Mode</option>
                 </select>
-            </div>            
+            </div>
             <div class="mb-3">
                 <label for="modeSelect" class="form-label">Select Question Mode:</label>
                 <select class="form-select" id="modeSelect" onchange="toggleModeOptions()">
@@ -225,6 +228,8 @@
             </div>
             <button type="button" class="btn btn-primary mt-3" onclick="startPractice()">Start Practice</button>
         </form>
+        <p id="hashVerificationMessage" class="text-danger" style="display: none;"></p>
+        
         <div id="timer" style="display: none;">00:00</div>
         <div id="questionContainer" class="question mt-4"></div>
         <div id="quizResults">
