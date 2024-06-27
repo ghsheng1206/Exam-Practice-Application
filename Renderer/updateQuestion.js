@@ -166,6 +166,13 @@ function displayUpdateTable(questions) {
         answerInput.className = 'form-control editable';
         answerInput.required = true;
         answerInput.value = question['Answer'] || '';
+
+        // Disable answer input if it matches a SHA-256 hash pattern
+        const isHashed = /^[a-f0-9]{64}$/.test(answerInput.value);
+        if (isHashed) {
+            answerInput.disabled = true;
+        }
+
         if (question['Question Type'] === 'Single-answer' || question['Question Type'] === 'True-false') {
             answerInput.maxLength = 1;
         }
