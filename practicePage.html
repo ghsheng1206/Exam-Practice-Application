@@ -173,11 +173,11 @@
         <form id="questionModeForm" class="mb-4" style="display: none;">
             <div class="mb-3">
                 <label for="practiceModeSelect" class="form-label">Select Practice Mode:</label>
-                <select class="form-select" id="practiceModeSelect">
+                <select class="form-select" id="practiceModeSelect" onchange="handlePracticeModeChange()">
                     <option value="practice">Practice Mode</option>
                     <option value="exam">Exam Mode</option>
                 </select>
-            </div>
+            </div>            
             <div class="mb-3">
                 <label for="modeSelect" class="form-label">Select Question Mode:</label>
                 <select class="form-select" id="modeSelect" onchange="toggleModeOptions()">

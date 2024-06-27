@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div id="collapse${index}" class="collapse" aria-labelledby="heading${index}" data-parent="#historyAccordion">
                 <div class="card-body">
                     <div class="result-row">
+                        <div class="result-item"><strong>Practice Mode:</strong> ${item.practiceMode || 'N/A'}</div>
                         <div class="result-item"><strong>Question Mode:</strong> ${item.questionMode || 'N/A'}</div>
                         <div class="result-item"><strong>Timer:</strong> ${item.timer || 'N/A'}</div>
                         <div class="result-item"><strong>Time Used:</strong> ${item.timeUsed || 'N/A'}</div>

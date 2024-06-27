@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
     }
 
-    const { score, total, completionDate, wrongAnswers, questionMode, timer, timeUsed } = results;
+    const { score, total, completionDate, wrongAnswers, questionMode, timer, timeUsed, practiceMode } = results;
     const percentage = Math.round((score / total) * 100);
 
     const progressCircle = document.getElementById('progressCircle');
@@ -81,7 +81,8 @@ document.addEventListener('DOMContentLoaded', function() {
         percentage: percentage,
         questionMode: questionMode,
         timer: timer,
-        timeUsed: timeUsed
+        timeUsed: timeUsed,
+        practiceMode: practiceMode // Ensure practice mode is saved
     });
 });
 

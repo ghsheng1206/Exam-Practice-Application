@@ -76,6 +76,9 @@ function startPractice() {
 
     const mode = document.getElementById('modeSelect').value;
 
+    localStorage.setItem('practiceMode', practiceMode);
+
+
     if (mode === 'all') {
         generateQuestionNav(currentQuestions.length);
     } else if (mode === 'random') {
@@ -386,7 +389,8 @@ async function submitQuiz() {
         completionDate: new Date().toISOString(),
         questionMode: document.getElementById('modeSelect').value,
         timer: localStorage.getItem('timerValue'),
-        timeUsed: calculateTimeUsed()
+        timeUsed: calculateTimeUsed(),
+        practiceMode: document.getElementById('practiceModeSelect').value
     };
 
     console.log("Quiz Results:", results);
