@@ -2,21 +2,32 @@ const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');  // Make sure to import the crypto module
+const windowStateKeeper = require('electron-window-state');
 
-// Environment variable or secure storage
 const secretWord = process.env.SECRET_WORD || 'This is secret word for answer 1234!@#$';
 
 let mainWindow;
 
 function createWindow() {
+  // Load the previous state with fallback to defaults
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1400,
+    defaultHeight: 800
+  });
+
   mainWindow = new BrowserWindow({
-    width: 1400,
-    height: 800,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
+    icon: path.join(__dirname, 'Icon', 'PracticeGo_icon.png'), // Update the icon path
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       //devTools: false // Disable the developer tools
     },
   });
+
+  mainWindowState.manage(mainWindow);
 
   mainWindow.loadFile('index.html');
 
