@@ -23,7 +23,7 @@ function createWindow() {
     icon: path.join(__dirname, 'Icon', 'PracticeGo_icon.png'), // Update the icon path
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      //devTools: false // Disable the developer tools
+      devTools: false // Disable the developer tools
     },
   });
 
